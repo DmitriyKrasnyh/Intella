@@ -36,44 +36,56 @@ export function Form({
   hasResults
 }: FormProps) {
   return (
-    <div className="space-y-6 p-6 border rounded-lg bg-card">
+    <div className="space-y-6 rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold text-slate-900">Настройки отчёта</h2>
+        <p className="text-sm text-slate-600">
+          Уточните параметры поиска, чтобы получить максимально релевантную выдачу.
+        </p>
+      </div>
+
       <div>
-        <Label className="text-base font-semibold">Language</Label>
+        <Label className="text-base font-semibold text-slate-900">Язык отчёта</Label>
+        <p className="text-xs text-slate-500">От выбранного языка зависят формулировки и текст итогового отчёта.</p>
         <RadioGroup
           value={lang}
           onValueChange={(value) => onLangChange(value as Language)}
-          className="flex gap-4 mt-2"
+          className="mt-3 flex flex-col gap-3 sm:flex-row"
         >
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 rounded-2xl border border-slate-200/60 bg-white/70 px-4 py-2 shadow-sm transition hover:border-sky-200">
             <RadioGroupItem value="ru" id="lang-ru" />
-            <Label htmlFor="lang-ru" className="font-normal cursor-pointer">
-              Russian
+            <Label htmlFor="lang-ru" className="cursor-pointer font-medium">
+              Русский
             </Label>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 rounded-2xl border border-slate-200/60 bg-white/70 px-4 py-2 shadow-sm transition hover:border-sky-200">
             <RadioGroupItem value="en" id="lang-en" />
-            <Label htmlFor="lang-en" className="font-normal cursor-pointer">
-              English
+            <Label htmlFor="lang-en" className="cursor-pointer font-medium">
+              Английский
             </Label>
           </div>
         </RadioGroup>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="deadline">Deadline (days)</Label>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="deadline" className="text-slate-900">
+            Срок в днях
+          </Label>
           <Input
             id="deadline"
             type="number"
             min={1}
             value={deadlineDays}
             onChange={(e) => onDeadlineDaysChange(Math.max(1, parseInt(e.target.value) || 1))}
-            className="mt-1.5"
           />
+          <p className="text-xs text-slate-500">Укажите, когда отчёт должен быть готов.</p>
         </div>
 
-        <div>
-          <Label htmlFor="maxResults">Max results</Label>
+        <div className="space-y-1.5">
+          <Label htmlFor="maxResults" className="text-slate-900">
+            Максимум результатов
+          </Label>
           <Input
             id="maxResults"
             type="number"
@@ -81,36 +93,38 @@ export function Form({
             step={10}
             value={maxResults}
             onChange={(e) => onMaxResultsChange(Math.max(10, parseInt(e.target.value) || 10))}
-            className="mt-1.5"
           />
+          <p className="text-xs text-slate-500">Контролируйте глубину выборки кандидатов.</p>
         </div>
       </div>
 
-      <div>
-        <Label htmlFor="query">Search query (optional)</Label>
+      <div className="space-y-1.5">
+        <Label htmlFor="query" className="text-slate-900">
+          Поисковый запрос (опционально)
+        </Label>
         <Input
           id="query"
           type="text"
-          placeholder="Enter specific search terms..."
+          placeholder="Например: финтех, Москва, Python senior"
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
-          className="mt-1.5"
         />
+        <p className="text-xs text-slate-500">Добавьте ключевые слова, чтобы сфокусировать поиск.</p>
       </div>
 
-      <div className="flex gap-3 pt-2">
+      <div className="flex flex-col gap-3 pt-2 sm:flex-row">
         <Button
           onClick={onGenerate}
           disabled={isRunning}
-          className="flex-1 md:flex-initial"
+          className="flex-1 gap-2 sm:flex-initial"
         >
           {isRunning ? (
             <>
-              <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-              Generating...
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              Формирование...
             </>
           ) : (
-            'Generate'
+            'Сформировать отчёт'
           )}
         </Button>
 
@@ -118,9 +132,10 @@ export function Form({
           <Button
             onClick={onRegenerate}
             disabled={isRunning}
-            variant="outline"
+            variant="secondary"
+            className="flex-1 sm:flex-initial"
           >
-            Regenerate
+            Пересоздать
           </Button>
         )}
 
@@ -128,8 +143,9 @@ export function Form({
           onClick={onReset}
           disabled={isRunning}
           variant="outline"
+          className="flex-1 sm:flex-initial"
         >
-          Reset
+          Сбросить
         </Button>
       </div>
     </div>

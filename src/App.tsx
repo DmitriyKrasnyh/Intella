@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
-import { Search } from 'lucide-react';
+import { Clock, FileText, Search, Sparkles } from 'lucide-react';
 import { Form } from './components/Form';
 import { StatusBar } from './components/StatusBar';
 import { CandidatesList } from './components/CandidatesList';
@@ -9,6 +9,7 @@ import { CompanyCard } from './components/CompanyCard';
 import { Toolbar } from './components/Toolbar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Separator } from './components/ui/separator';
+import { Badge } from './components/ui/badge';
 import { generateReport } from './lib/api';
 import type { Language, JobStatus, ReportData } from './types';
 
@@ -38,14 +39,18 @@ function App() {
         setReportData(response.data);
         setFiles(response.files);
         setStatus('completed');
-        toast.success('Report generated successfully!');
+        toast.success('Отчёт успешно сформирован!');
       } else {
-        setError(response.error || 'Failed to generate report');
+        setError(response.error || 'Не удалось сформировать отчёт');
         setStatus('error');
-        toast.error(response.error || 'Failed to generate report');
+        toast.error(response.error || 'Не удалось сформировать отчёт');
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      const errorMessage = err instanceof Error
+        ? err.message === 'Failed to fetch'
+          ? 'Не удалось установить соединение с сервером'
+          : err.message
+        : 'Произошла непредвиденная ошибка';
       setError(errorMessage);
       setStatus('error');
       toast.error(errorMessage);
@@ -68,9 +73,9 @@ function App() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
+    return new Date(dateString).toLocaleString('ru-RU', {
       year: 'numeric',
-      month: 'short',
+      month: 'long',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -78,23 +83,64 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <Toaster position="top-right" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-sky-50 via-white to-blue-100">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-24 -right-32 h-72 w-72 rounded-full bg-sky-200 blur-3xl opacity-60" />
+        <div className="absolute top-1/2 -left-32 h-80 w-80 rounded-full bg-blue-300 blur-3xl opacity-40" />
+        <div className="absolute bottom-0 right-1/4 h-64 w-64 rounded-full bg-cyan-200 blur-3xl opacity-40" />
+      </div>
 
-      <div className="container max-w-5xl mx-auto px-4 py-8 md:py-12">
-        <header className="mb-8 text-center">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <Search className="h-8 w-8 text-blue-600" />
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-              Whale Hunter Report
-            </h1>
+      <Toaster position="top-right" richColors />
+
+      <div className="container relative z-10 mx-auto max-w-5xl px-4 py-10 md:py-16">
+        <header className="mb-12 space-y-6 text-center">
+          <Badge className="mx-auto w-fit rounded-full border border-sky-200/60 bg-sky-600/10 px-4 py-1 text-sky-700 backdrop-blur">
+            AI-помощник ресёрчера
+          </Badge>
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex items-center justify-center gap-3">
+              <Search className="h-10 w-10 text-sky-600" />
+              <h1 className="text-balance text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">
+                Whale Hunter — аналитический отчёт по кандидатам
+              </h1>
+            </div>
+            <p className="text-muted-foreground text-balance mx-auto max-w-2xl">
+              Получайте структурированные инсайты о рынке талантов, объединяющие поиск, аналитику и удобный экспорт, — всё на русском языке.
+            </p>
           </div>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Generate comprehensive candidate research reports with intelligent analysis
-          </p>
+
+          <div className="grid grid-cols-1 gap-4 text-left md:grid-cols-3">
+            <div className="flex gap-4 rounded-3xl border border-white/60 bg-white/80 p-5 shadow-lg backdrop-blur">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-blue-600 text-white">
+                <Sparkles className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">Глубокий анализ</h3>
+                <p className="text-sm text-slate-600">Алгоритм выделяет ключевые факторы и формирует понятные выводы.</p>
+              </div>
+            </div>
+            <div className="flex gap-4 rounded-3xl border border-white/60 bg-white/80 p-5 shadow-lg backdrop-blur">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
+                <Clock className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">Сроки под контролем</h3>
+                <p className="text-sm text-slate-600">Настройте дедлайн и объём выборки под конкретный запрос.</p>
+              </div>
+            </div>
+            <div className="flex gap-4 rounded-3xl border border-white/60 bg-white/80 p-5 shadow-lg backdrop-blur">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-sky-600 text-white">
+                <FileText className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">Готовый экспорт</h3>
+                <p className="text-sm text-slate-600">Скачайте PDF или JSON, чтобы делиться отчётом с командой.</p>
+              </div>
+            </div>
+          </div>
         </header>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           <Form
             lang={lang}
             deadlineDays={deadlineDays}
@@ -115,8 +161,8 @@ function App() {
 
           {reportData && (
             <>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4">
-                <h2 className="text-2xl font-semibold">Report Preview</h2>
+              <div className="flex flex-col items-start justify-between gap-4 pt-4 sm:flex-row sm:items-center">
+                <h2 className="text-2xl font-semibold text-slate-900">Предпросмотр отчёта</h2>
                 <Toolbar
                   pdfUrl={files?.pdfUrl}
                   jsonUrl={files?.jsonUrl}
@@ -126,10 +172,9 @@ function App() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Job Description</CardTitle>
+                  <CardTitle>Описание вакансии</CardTitle>
                   <CardDescription>
-                    Generated: {formatDate(reportData.now)} • Deadline:{' '}
-                    {formatDate(reportData.deadline)}
+                    Сформировано: {formatDate(reportData.now)} • Дедлайн {formatDate(reportData.deadline)}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -138,8 +183,8 @@ function App() {
               </Card>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">
-                  Candidates ({reportData.candidates.length})
+                <h3 className="mb-4 text-xl font-semibold text-slate-900">
+                  Кандидаты ({reportData.candidates.length})
                 </h3>
                 <CandidatesList candidates={reportData.candidates} />
               </div>
@@ -147,35 +192,33 @@ function App() {
               <Separator />
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">
-                  Selection Rationales
-                </h3>
+                <h3 className="mb-4 text-xl font-semibold text-slate-900">Причины выбора</h3>
                 <RationalesList rationales={reportData.rationales} />
               </div>
 
               <Separator />
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">Company Information</h3>
+                <h3 className="mb-4 text-xl font-semibold text-slate-900">Информация о компании</h3>
                 <CompanyCard company={reportData.company} />
               </div>
             </>
           )}
 
           {!reportData && status === 'idle' && (
-            <Card className="border-dashed">
-              <CardContent className="pt-12 pb-12 text-center">
-                <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <Card className="border-dashed bg-white/70 shadow-inner backdrop-blur">
+              <CardContent className="pb-12 pt-12 text-center">
+                <Search className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
                 <p className="text-muted-foreground">
-                  Configure your search parameters and click Generate to create a report
+                  Настройте параметры поиска и нажмите «Сформировать отчёт», чтобы получить результат
                 </p>
               </CardContent>
             </Card>
           )}
         </div>
 
-        <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground">
-          Data via public search. Verify manually.
+        <footer className="mt-16 border-t pt-6 text-center text-sm text-muted-foreground">
+          Данные собираются из открытых источников. Проверяйте ключевые факты перед использованием.
         </footer>
       </div>
     </div>

@@ -7,8 +7,8 @@ interface RationalesListProps {
 export function RationalesList({ rationales }: RationalesListProps) {
   if (rationales.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
-        No rationales available
+      <div className="py-8 text-center text-muted-foreground">
+        Причины не указаны
       </div>
     );
   }
@@ -16,13 +16,16 @@ export function RationalesList({ rationales }: RationalesListProps) {
   return (
     <div className="space-y-3">
       {rationales.map((rationale, index) => (
-        <Card key={index}>
+        <Card
+          key={index}
+          className="rounded-3xl border border-white/60 bg-white/90 shadow-sm backdrop-blur"
+        >
           <CardContent className="pt-6">
             <div className="flex gap-3">
-              <div className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-sky-600/10 text-sm font-semibold text-sky-700">
                 {index + 1}
               </div>
-              <p className="text-sm leading-relaxed">{rationale}</p>
+              <p className="text-sm leading-relaxed text-slate-600">{rationale}</p>
             </div>
           </CardContent>
         </Card>
