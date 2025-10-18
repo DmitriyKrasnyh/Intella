@@ -9,38 +9,38 @@ interface CompanyCardProps {
 export function CompanyCard({ company }: CompanyCardProps) {
   if (!company.name && !company.url && !company.snippet) {
     return (
-      <Card>
+      <Card className="rounded-3xl border border-white/60 bg-white/90 shadow-sm">
         <CardContent className="pt-6 text-center text-muted-foreground">
-          No company information available
+          Информация о компании отсутствует
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card>
+    <Card className="rounded-3xl border border-white/60 bg-white/90 shadow-md">
       <CardHeader>
-        <CardTitle className="flex items-start justify-between gap-2">
-          <span>{company.name || 'Company'}</span>
+        <CardTitle className="flex items-start justify-between gap-2 text-slate-900">
+          <span>{company.name || 'Компания'}</span>
           {company.url && (
             <a
               href={company.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors shrink-0"
-              aria-label="Visit company website"
+              className="shrink-0 text-sky-600 transition-colors hover:text-sky-700"
+              aria-label="Перейти на сайт компании"
             >
               <ExternalLink className="h-5 w-5" />
             </a>
           )}
         </CardTitle>
         {company.url && (
-          <CardDescription className="truncate">{company.url}</CardDescription>
+          <CardDescription className="truncate text-slate-600">{company.url}</CardDescription>
         )}
       </CardHeader>
       {company.snippet && (
         <CardContent>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm leading-relaxed text-slate-600">
             {company.snippet}
           </p>
         </CardContent>

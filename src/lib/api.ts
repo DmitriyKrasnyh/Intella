@@ -8,36 +8,41 @@ const mockData: GenerateResponse = {
     lang: 'ru',
     now: new Date().toISOString(),
     deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-    job_description: 'Senior Backend Developer with 5+ years of experience in Python and distributed systems. Strong knowledge of microservices architecture, Docker, Kubernetes. Experience with PostgreSQL, Redis, RabbitMQ. Understanding of CI/CD processes and cloud platforms (AWS/GCP).',
+    job_description:
+      'Ищем старшего backend-разработчика (Python) с опытом от 5 лет и экспертизой в проектировании распределённых систем. Важно глубокое понимание микросервисной архитектуры, Docker и Kubernetes, а также практический опыт работы с PostgreSQL, Redis и очередями сообщений.',
     candidates: [
       {
-        name: 'Alex Petrov',
-        title: 'Lead Backend Engineer at TechCorp',
+        name: 'Алексей Петров',
+        title: 'Ведущий backend-инженер, TechCorp',
         url: 'https://linkedin.com/in/alex-petrov',
-        snippet: 'Experienced backend developer with 7 years in Python. Built scalable microservices handling 10M+ requests/day. Expert in PostgreSQL optimization and distributed systems design.'
+        snippet:
+          '7 лет развивает Python-бэкенды и проектирует микросервисы, выдерживающие 10M+ запросов в сутки. Сильен в оптимизации PostgreSQL, проектировании распределённых систем и менторстве команды.'
       },
       {
-        name: 'Maria Ivanova',
-        title: 'Senior Software Engineer at DataSystems',
+        name: 'Мария Иванова',
+        title: 'Старший инженер-программист, DataSystems',
         url: 'https://linkedin.com/in/maria-ivanova',
-        snippet: 'Full-stack engineer specializing in backend development. 6 years of experience with Python, Django, FastAPI. Proficient in cloud infrastructure and container orchestration with Kubernetes.'
+        snippet:
+          'Full-stack инженер с фокусом на серверной части. 6 лет работает с Python, Django и FastAPI, разворачивает облачную инфраструктуру и управляет кластерами Kubernetes в продакшене.'
       },
       {
-        name: 'Dmitry Sokolov',
-        title: 'Backend Architect at CloudServices',
+        name: 'Дмитрий Соколов',
+        title: 'Архитектор бэкенда, CloudServices',
         url: 'https://linkedin.com/in/dmitry-sokolov',
-        snippet: 'Backend architect with strong focus on scalability and performance. 8 years building distributed systems. Deep expertise in message queues, caching strategies, and database design.'
+        snippet:
+          'Архитектор бэкенда с 8-летним опытом построения высоконагруженных систем. Глубоко разбирается в очередях сообщений, стратегиях кеширования и проектировании баз данных.'
       }
     ],
     rationales: [
-      'Alex Petrov demonstrates strong technical leadership and hands-on experience with the exact tech stack required. His proven track record of building high-performance systems aligns perfectly with our needs.',
-      'Maria Ivanova brings versatile expertise across modern Python frameworks and cloud-native technologies. Her experience with Kubernetes and infrastructure as code makes her valuable for our DevOps culture.',
-      'Dmitry Sokolov\'s architectural background and focus on distributed systems design provides strategic value. His experience scaling complex systems can help avoid common pitfalls in our growth phase.'
+      'Алексей Петров сочетает техническое лидерство и практический опыт в стеке проекта. Его кейсы масштабирования микросервисов напрямую коррелируют с нашими задачами роста.',
+      'Мария Иванова закрывает потребность в современном Python-стеке и облачной инфраструктуре. Уверенно работает с Kubernetes и практиками IaC, что усиливает взаимодействие с DevOps-командой.',
+      'Архитектурный опыт Дмитрия Соколова и фокус на распределённых системах добавляют стратегическую ценность. Он поможет выстроить устойчивую платформу без типичных ошибок масштабирования.'
     ],
     company: {
       name: 'TechVentures Inc.',
       url: 'https://techventures.example.com',
-      snippet: 'Leading technology company specializing in SaaS solutions for enterprise clients. Founded in 2015, now serving 500+ customers worldwide with a team of 200+ professionals.'
+      snippet:
+        'Развивающаяся продуктовая IT-компания, создающая SaaS-решения для enterprise-сегмента. Основана в 2015 году, обслуживает более 500 клиентов по всему миру и насчитывает 200+ сотрудников.'
     }
   },
   files: {
@@ -84,7 +89,7 @@ export async function generateReport(params: GenerateParams): Promise<GenerateRe
     if (!response.ok) {
       return {
         ok: false,
-        error: data.error || 'Failed to generate report'
+        error: data.error || 'Не удалось сформировать отчёт'
       };
     }
 
@@ -94,17 +99,19 @@ export async function generateReport(params: GenerateParams): Promise<GenerateRe
       if (error.name === 'AbortError') {
         return {
           ok: false,
-          error: 'Request cancelled'
+          error: 'Запрос отменён'
         };
       }
       return {
         ok: false,
-        error: error.message
+        error: error.message === 'Failed to fetch'
+          ? 'Не удалось установить соединение с сервером'
+          : error.message
       };
     }
     return {
       ok: false,
-      error: 'Unknown error occurred'
+      error: 'Произошла неизвестная ошибка'
     };
   }
 }
@@ -128,7 +135,7 @@ export async function downloadFile(url: string, filename: string) {
     document.body.removeChild(link);
     URL.revokeObjectURL(link.href);
   } catch (error) {
-    console.error('Download failed:', error);
+    console.error('Не удалось скачать файл:', error);
     throw error;
   }
 }

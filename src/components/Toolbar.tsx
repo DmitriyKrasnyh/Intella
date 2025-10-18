@@ -15,9 +15,9 @@ export function Toolbar({ pdfUrl, jsonUrl, enabled }: ToolbarProps) {
 
     try {
       await downloadFile(pdfUrl, 'whale-hunter-report.pdf');
-      toast.success('PDF downloaded successfully');
+      toast.success('PDF успешно скачан');
     } catch {
-      toast.error('Failed to download PDF');
+      toast.error('Не удалось скачать PDF');
     }
   };
 
@@ -26,9 +26,9 @@ export function Toolbar({ pdfUrl, jsonUrl, enabled }: ToolbarProps) {
 
     try {
       await downloadFile(jsonUrl, 'whale-hunter-report.json');
-      toast.success('JSON downloaded successfully');
+      toast.success('JSON успешно скачан');
     } catch {
-      toast.error('Failed to download JSON');
+      toast.error('Не удалось скачать JSON');
     }
   };
 
@@ -41,7 +41,7 @@ export function Toolbar({ pdfUrl, jsonUrl, enabled }: ToolbarProps) {
         className="flex-1 sm:flex-initial"
       >
         <Download className="mr-2 h-4 w-4" />
-        Download PDF
+        Скачать PDF
       </Button>
 
       <Button
@@ -51,7 +51,7 @@ export function Toolbar({ pdfUrl, jsonUrl, enabled }: ToolbarProps) {
         className="flex-1 sm:flex-initial"
       >
         <FileJson className="mr-2 h-4 w-4" />
-        Download JSON
+        Скачать JSON
       </Button>
     </div>
   );

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { ExternalLink } from 'lucide-react';
+import { Badge } from './ui/badge';
 import type { Candidate } from '../types';
 
 interface CandidatesListProps {
@@ -23,8 +24,8 @@ export function CandidatesList({ candidates }: CandidatesListProps) {
 
   if (candidates.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
-        No candidates found
+      <div className="py-8 text-center text-muted-foreground">
+        Кандидаты не найдены
       </div>
     );
   }
@@ -36,37 +37,47 @@ export function CandidatesList({ candidates }: CandidatesListProps) {
         const hasLongSnippet = candidate.snippet && candidate.snippet.length > 150;
 
         return (
-          <Card key={index}>
-            <CardHeader>
-              <CardTitle className="flex items-start justify-between gap-2">
-                <span>{candidate.name}</span>
+          <Card
+            key={index}
+            className="rounded-3xl border border-white/60 bg-white/90 shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+          >
+            <CardHeader className="space-y-0">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  <Badge className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-600/10 p-0 text-sm font-semibold text-sky-700">
+                    {index + 1}
+                  </Badge>
+                  <div>
+                    <CardTitle className="text-lg text-slate-900">{candidate.name}</CardTitle>
+                    <CardDescription className="text-slate-600">{candidate.title}</CardDescription>
+                  </div>
+                </div>
                 <a
                   href={candidate.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 transition-colors shrink-0"
-                  aria-label={`View ${candidate.name}'s profile`}
+                  className="shrink-0 text-sky-600 transition-colors hover:text-sky-700"
+                  aria-label={`Открыть профиль ${candidate.name}`}
                 >
                   <ExternalLink className="h-5 w-5" />
                 </a>
-              </CardTitle>
-              <CardDescription>{candidate.title}</CardDescription>
+              </div>
             </CardHeader>
             {candidate.snippet && (
               <CardContent>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm leading-relaxed text-slate-600">
                   {isExpanded || !hasLongSnippet
                     ? candidate.snippet
-                    : `${candidate.snippet.substring(0, 150)}...`}
+                    : `${candidate.snippet.substring(0, 150)}…`}
                 </p>
                 {hasLongSnippet && (
                   <Button
                     variant="link"
                     size="sm"
                     onClick={() => toggleCard(index)}
-                    className="px-0 mt-1"
+                    className="mt-2 px-0"
                   >
-                    {isExpanded ? 'Show less' : 'Show more'}
+                    {isExpanded ? 'Свернуть текст' : 'Показать полностью'}
                   </Button>
                 )}
               </CardContent>
